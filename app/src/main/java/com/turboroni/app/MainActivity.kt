@@ -135,6 +135,7 @@ class MainActivity:ComponentActivity(){
        Box(Modifier.fillMaxWidth().aspectRatio(1f).pointerInput(Unit){
         detectTapGestures{pos=it;spark++}
        },contentAlignment=Alignment.Center){
+        EnergyField(Modifier.fillMaxSize(), intensity = if(seconds<=30) 1f else .65f)
         Canvas(Modifier.fillMaxSize()){
          val r=size.minDimension*.42f
          drawCircle(panel,r+18.dp.toPx())
