@@ -90,33 +90,82 @@ class MainActivity:ComponentActivity(){
      Spacer(Modifier.height(18.dp))
      when(phase){
       "HOME"->{
-       Text("CHOOSE YOUR QUEST",fontWeight=FontWeight.Bold,color=Color.White)
-       Spacer(Modifier.height(16.dp))
+       Text("PLAYER ONE  ·  LEVEL 08",color=Color(0xFFA9C5B9),fontSize=12.sp,fontWeight=FontWeight.Bold)
+       Text("HEY, RONI!",color=Color.White,fontSize=34.sp,fontWeight=FontWeight.Black)
+       Spacer(Modifier.height(12.dp))
+       Box(Modifier.fillMaxWidth().height(205.dp).background(Color(0xFF173E42),RoundedCornerShape(20.dp))
+        .clickable { begin(missions.first()) },contentAlignment=Alignment.Center){
+        Canvas(Modifier.fillMaxSize()){
+         val w=size.width;val h=size.height
+         // Floating island, glowing crystals and playful gorilla silhouette.
+         drawCircle(Color(0xFF295F68),h*.60f,Offset(w*.77f,h*.33f))
+         drawCircle(Color(0xFF70B9B3),h*.19f,Offset(w*.82f,h*.19f),alpha=.45f)
+         drawOval(Color(0xFF304F36),topLeft=Offset(w*.07f,h*.72f),
+          size=androidx.compose.ui.geometry.Size(w*.88f,h*.24f))
+         drawOval(Color(0xFF67A955),topLeft=Offset(w*.10f,h*.66f),
+          size=androidx.compose.ui.geometry.Size(w*.82f,h*.17f))
+         repeat(9){i->
+          val x=w*(.15f+i*.085f)
+          drawCircle(if(i%2==0)lime else Color(0xFF72D7D1),5f+(i%3)*3f,Offset(x,h*(.65f+(i%3)*.035f)))
+         }
+         // Gorilla mascot silhouette: head, ears, face and eyes.
+         drawCircle(Color(0xFF162525),h*.21f,Offset(w*.54f,h*.39f))
+         drawCircle(Color(0xFF162525),h*.09f,Offset(w*.37f,h*.39f))
+         drawCircle(Color(0xFF162525),h*.09f,Offset(w*.71f,h*.39f))
+         drawOval(Color(0xFFB19A79),topLeft=Offset(w*.42f,h*.34f),
+          size=androidx.compose.ui.geometry.Size(w*.24f,h*.21f))
+         drawCircle(Color.White,4.5f,Offset(w*.49f,h*.39f))
+         drawCircle(Color.White,4.5f,Offset(w*.59f,h*.39f))
+         drawCircle(Color(0xFF162525),2.5f,Offset(w*.49f,h*.39f))
+         drawCircle(Color(0xFF162525),2.5f,Offset(w*.59f,h*.39f))
+        }
+        Column(Modifier.align(Alignment.BottomStart).padding(15.dp)){
+         Text("TODAY'S ADVENTURE",color=lime,fontWeight=FontWeight.Black,fontSize=12.sp)
+         Text("YOUR WORLD IS WAITING!",color=Color.White,fontWeight=FontWeight.Black,fontSize=19.sp)
+        }
+       }
+       Spacer(Modifier.height(15.dp))
+       Text("PICK YOUR NEXT QUEST",color=Color.White,fontWeight=FontWeight.Black,fontSize=17.sp)
+       Spacer(Modifier.height(9.dp))
        LazyColumn(verticalArrangement=Arrangement.spacedBy(10.dp),modifier=Modifier.weight(1f)){
-        items(missions){m->
-         Row(Modifier.fillMaxWidth().background(panel,RoundedCornerShape(18.dp)).clickable{begin(m)}.padding(18.dp),
-          horizontalArrangement=Arrangement.SpaceBetween){
-          Text(m.title,color=Color.White,fontWeight=FontWeight.Bold)
-          Text("${m.seconds/60} MIN  ▶",color=lime)
+        items(missions.chunked(2)){pair->
+         Row(horizontalArrangement=Arrangement.spacedBy(10.dp)){
+          pair.forEachIndexed{index,m->
+           val ix=missions.indexOf(m)
+           val accents=listOf(Color(0xFFFFB950),Color(0xFFEBA3F6),Color(0xFF68CFF5),Color(0xFF87E7AA),Color(0xFFF6C875),Color(0xFFB4A6FA))
+           val accent=accents[ix%accents.size]
+           Column(Modifier.weight(1f).height(147.dp).background(
+            Color(0xFF203039),RoundedCornerShape(17.dp)).clickable{begin(m)}.padding(13.dp),
+            verticalArrangement=Arrangement.SpaceBetween){
+            Box(Modifier.size(60.dp).background(accent.copy(alpha=.18f),RoundedCornerShape(15.dp)),
+             contentAlignment=Alignment.Center){
+             Text(listOf("⚡","✦","◆","✚","✎","●")[ix],fontSize=38.sp,color=accent,fontWeight=FontWeight.Black)
+            }
+            Text(m.title,color=Color.White,fontWeight=FontWeight.Black,fontSize=17.sp,maxLines=1)
+            Text("%02d:%02d  ▶".format(m.seconds/60,m.seconds%60),color=accent,fontWeight=FontWeight.Bold,fontSize=13.sp)
+           }
+          }
+          if(pair.size==1)Spacer(Modifier.weight(1f))
          }
         }
        }
-       Text("CLOCK SOUND",color=Color.White,fontWeight=FontWeight.Bold)
-       val names=listOf("Monster","Arcade","Jungle","Classic","Cartoon")
-       Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(5.dp)){
-        names.forEachIndexed{idx,name->
-         Text(name,modifier=Modifier.weight(1f).background(if(pack==idx)lime else panel,RoundedCornerShape(9.dp))
-          .clickable{pack=idx;prefs.edit().putInt("pack",idx).apply();beep(1)}.padding(vertical=12.dp),
-          color=if(pack==idx)dark else Color.White,fontSize=10.sp,textAlign=TextAlign.Center)
+       Spacer(Modifier.height(9.dp))
+       Row(Modifier.fillMaxWidth().background(Color(0xFF294037),RoundedCornerShape(17.dp))
+        .padding(15.dp),verticalAlignment=Alignment.CenterVertically){
+        Text("★",color=lime,fontSize=38.sp)
+        Spacer(Modifier.width(12.dp))
+        Column(Modifier.weight(1f)){
+         Text("WISH VAULT",color=Color.White,fontWeight=FontWeight.Black,fontSize=17.sp)
+         Text("$badges / 10 badges to a wish",color=Color(0xFFB8CFC4),fontSize=12.sp)
         }
        }
-       Spacer(Modifier.height(12.dp))
+       Spacer(Modifier.height(8.dp))
        Row(verticalAlignment=Alignment.CenterVertically){
-        Text("Sound",color=Color.White);Switch(soundOn,{soundOn=it;prefs.edit().putBoolean("sound",it).apply()})
-        Spacer(Modifier.width(8.dp))
-        Text("Tick:",color=Color.White)
-        TextButton(onClick={tickMode=(tickMode+1)%3;prefs.edit().putInt("tickMode",tickMode).apply()}){
-         Text(listOf("Last 30s","Always","Last 60s")[tickMode])
+        Text("SOUND",color=Color.White,fontSize=11.sp)
+        Switch(soundOn,{soundOn=it;prefs.edit().putBoolean("sound",it).apply()})
+        Spacer(Modifier.width(6.dp))
+        TextButton(onClick={pack=(pack+1)%5;prefs.edit().putInt("pack",pack).apply();beep(1)}){
+         Text(listOf("MONSTER","ARCADE","JUNGLE","CLASSIC","CARTOON")[pack],fontSize=11.sp)
         }
        }
       }
