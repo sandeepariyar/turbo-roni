@@ -1,8 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <application android:label="Turbo Roni" android:theme="@android:style/Theme.Material.NoActionBar" android:allowBackup="true">
-        <activity android:name=".MainActivity" android:exported="true">
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <application android:allowBackup="true" android:label="Turbo Roni" android:theme="@android:style/Theme.Material.NoActionBar" android:usesCleartextTraffic="false">
+        <activity android:name=".MainActivity" android:exported="true" android:showWhenLocked="true" android:turnScreenOn="true">
             <intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter>
         </activity>
+        <service android:name=".QuestService" android:exported="false" android:foregroundServiceType="specialUse">
+            <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE" android:value="User-initiated, visible countdown for a child's real-world routine activity"/>
+        </service>
     </application>
 </manifest>
