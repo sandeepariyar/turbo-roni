@@ -132,33 +132,8 @@ class MainActivity:ComponentActivity(){
        Text(m.title.uppercase(),color=Color.White,fontWeight=FontWeight.Bold,
         modifier=Modifier.fillMaxWidth(),textAlign=TextAlign.Center)
        Spacer(Modifier.weight(.5f))
-       Box(Modifier.fillMaxWidth().aspectRatio(1f).pointerInput(Unit){
-        detectTapGestures{pos=it;spark++}
-       },contentAlignment=Alignment.Center){
-        EnergyField(Modifier.fillMaxSize(), intensity = if(seconds<=30) 1f else .65f)
-        Canvas(Modifier.fillMaxSize()){
-         val r=size.minDimension*.42f
-         drawCircle(panel,r+18.dp.toPx())
-         drawCircle(Color(0xFF385447),r,style=Stroke(10.dp.toPx()))
-         drawArc(lime,-90f,360f*(seconds.toFloat()/m.seconds).coerceIn(0f,1f),false,
-          topLeft=Offset(center.x-r,center.y-r),
-          size=androidx.compose.ui.geometry.Size(r*2,r*2),
-          style=Stroke(10.dp.toPx(),cap=StrokeCap.Round))
-         repeat(105){i->
-          val a=i*2.399963f+orbit
-          val d=sqrt((i+1)/105f)*r*.9f
-          drawCircle(if(i%4==0)lime else Color(0xFF61B68A),if(i%7==0)3f else 1.5f,
-           Offset(center.x+cos(a)*d,center.y+sin(a)*d),alpha=.3f+(i%5)*.1f)
-         }
-         if(spark>0)repeat(22){i->
-          val a=i*2.399963f+orbit*3f
-          drawCircle(lime,3f,Offset(pos.x+cos(a)*36f,pos.y+sin(a)*36f))
-         }
-        }
-        Column(horizontalAlignment=Alignment.CenterHorizontally){
-         Text("%02d:%02d".format(seconds/60,seconds%60),color=Color.White,fontSize=68.sp,fontWeight=FontWeight.Black)
-         Text(if(paused)"PAUSED" else "LET'S GO!",color=lime,fontWeight=FontWeight.Bold)
-        }
+       Box(Modifier.fillMaxWidth().aspectRatio(1f),contentAlignment=Alignment.Center){
+        LivingTime(seconds, m.seconds, paused, Modifier.fillMaxSize())
        }
        Spacer(Modifier.height(16.dp))
        val best=prefs.getInt("best_${m.title}",0)
